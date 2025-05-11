@@ -213,7 +213,11 @@ export function EventForm({ initialData, extractedText, imageData }: EventFormPr
                   <FormItem>
                     <FormLabel>Registration Deadline</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} />
+                      <Input 
+                        type="date" 
+                        {...field} 
+                        value={field.value || ''} 
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -228,7 +232,11 @@ export function EventForm({ initialData, extractedText, imageData }: EventFormPr
                 <FormItem>
                   <FormLabel>Registration Link</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="https://example.com/register" />
+                    <Input 
+                      {...field} 
+                      placeholder="https://example.com/register" 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -298,7 +306,11 @@ export function EventForm({ initialData, extractedText, imageData }: EventFormPr
                 <FormItem>
                   <FormLabel>Contact Name</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Primary contact person" />
+                    <Input 
+                      {...field} 
+                      placeholder="Primary contact person" 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -312,7 +324,11 @@ export function EventForm({ initialData, extractedText, imageData }: EventFormPr
                 <FormItem>
                   <FormLabel>Contact Phone</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Phone number" />
+                    <Input 
+                      {...field} 
+                      placeholder="Phone number" 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -326,7 +342,11 @@ export function EventForm({ initialData, extractedText, imageData }: EventFormPr
                 <FormItem>
                   <FormLabel>Secondary Contact Name</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Secondary contact person" />
+                    <Input 
+                      {...field} 
+                      placeholder="Secondary contact person" 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -340,7 +360,11 @@ export function EventForm({ initialData, extractedText, imageData }: EventFormPr
                 <FormItem>
                   <FormLabel>Secondary Contact Title</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="e.g. Event Coordinator" />
+                    <Input 
+                      {...field} 
+                      placeholder="e.g. Event Coordinator" 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -354,7 +378,11 @@ export function EventForm({ initialData, extractedText, imageData }: EventFormPr
                 <FormItem>
                   <FormLabel>Organization</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Organizing body or company" />
+                    <Input 
+                      {...field} 
+                      placeholder="Organizing body or company" 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
