@@ -43,19 +43,19 @@ export function EventForm({ initialData, extractedText, imageData }: EventFormPr
       endTime: initialData.endTime || '',
       venue: initialData.venue || '',
       address: initialData.address || '',
-      fee: initialData.fee || null,
-      registrationDeadline: initialData.registrationDeadline || null,
-      registrationLink: initialData.registrationLink || null,
+      fee: initialData.fee || '',
+      registrationDeadline: initialData.registrationDeadline || '',
+      registrationLink: initialData.registrationLink || '',
       categories: initialData.categories || [],
-      contactName1: initialData.contactName1 || null,
-      contactPhone1: initialData.contactPhone1 || null,
-      contactName2: initialData.contactName2 || null,
-      contactTitle2: initialData.contactTitle2 || null,
-      organization: initialData.organization || null,
-      notes: initialData.notes || null,
+      contactName1: initialData.contactName1 || '',
+      contactPhone1: initialData.contactPhone1 || '',
+      contactName2: initialData.contactName2 || '',
+      contactTitle2: initialData.contactTitle2 || '',
+      organization: initialData.organization || '',
+      notes: initialData.notes || '',
       category: initialData.category || 'Sports',
-      imageData: imageData || null,
-      extractedText: extractedText || null,
+      imageData: imageData || '',
+      extractedText: extractedText || '',
     },
   });
 
@@ -195,7 +195,11 @@ export function EventForm({ initialData, extractedText, imageData }: EventFormPr
                   <FormItem>
                     <FormLabel>Registration Fee</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="e.g. $30 per Team" />
+                      <Input 
+                        {...field} 
+                        placeholder="e.g. $30 per Team"
+                        value={field.value || ''} 
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
