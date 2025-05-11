@@ -1,10 +1,5 @@
 import { useState, useCallback } from 'react';
-import { createWorker } from 'tesseract.js';
-
-interface OcrResult {
-  text: string;
-  progress: number;
-}
+import * as Tesseract from 'tesseract.js';
 
 interface UseOcrReturn {
   processImage: (imageFile: File) => Promise<string>;
@@ -29,35 +24,16 @@ export function useOcr(): UseOcrReturn {
         throw new Error('File format not supported. Please upload an image file.');
       }
 
-      const worker = await createWorker({
-        logger: (m) => {
-          if (m.status === 'recognizing text') {
-            setProgress(parseInt(String(m.progress * 100)));
-          }
-        },
-      });
-
-      await worker.load();
-      await worker.loadLanguage('eng');
-      await worker.initialize('eng');
+      // Use the file object directly
+      const result = await Tesseract.recognize(
+        imageFile,
+        'eng'
+      );
       
-      const imageUrl = URL.createObjectURL(imageFile);
-      
-      try {
-        const { data } = await worker.recognize(imageUrl);
-        
-        URL.revokeObjectURL(imageUrl);
-        await worker.terminate();
-        
-        setProgress(100);
-        setIsProcessing(false);
-        return data.text;
-      } catch (recognizeError) {
-        URL.revokeObjectURL(imageUrl);
-        await worker.terminate();
-        throw new Error('Image recognition failed. Please try a different image.');
-      }
-      
+      // Set progress to 100% when done
+      setProgress(100);
+      setIsProcessing(false);
+      return result.data.text || '';
     } catch (err) {
       console.error('OCR processing error:', err);
       setError(err instanceof Error ? err.message : 'Failed to process the image. Please try again.');

@@ -234,7 +234,7 @@ export function parseEventText(text: string): ExtractedData {
       text.toLowerCase().includes('basketball') ||
       text.toLowerCase().includes('soccer') ||
       text.toLowerCase().includes('tournament') ||
-      extractedData.categories.some(cat => cat.toLowerCase().includes('doubles') || cat.toLowerCase().includes('singles'))) {
+      extractedData.categories.some((cat: string) => cat.toLowerCase().includes('doubles') || cat.toLowerCase().includes('singles'))) {
     extractedData.category = 'Sports';
   } else if (text.toLowerCase().includes('music') || 
              text.toLowerCase().includes('dance') ||
