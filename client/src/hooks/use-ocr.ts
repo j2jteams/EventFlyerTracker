@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { createWorker, type Worker, type LoggerMessage } from 'tesseract.js';
+import { createWorker } from 'tesseract.js';
 
 interface OcrResult {
   text: string;
@@ -23,22 +23,21 @@ export function useOcr(): UseOcrReturn {
     setProgress(0);
     setError(null);
 
-    let worker: Worker | null = null;
-
     try {
       // Support for different image formats
       if (!imageFile.type.startsWith('image/')) {
         throw new Error('File format not supported. Please upload an image file.');
       }
 
-      worker = await createWorker({
-        logger: (m: LoggerMessage) => {
+      const worker = await createWorker({
+        logger: (m) => {
           if (m.status === 'recognizing text') {
-            setProgress(m.progress * 100);
+            setProgress(parseInt(String(m.progress * 100)));
           }
         },
       });
 
+      await worker.load();
       await worker.loadLanguage('eng');
       await worker.initialize('eng');
       
@@ -48,21 +47,20 @@ export function useOcr(): UseOcrReturn {
         const { data } = await worker.recognize(imageUrl);
         
         URL.revokeObjectURL(imageUrl);
-        if (worker) await worker.terminate();
+        await worker.terminate();
         
         setProgress(100);
         setIsProcessing(false);
         return data.text;
       } catch (recognizeError) {
         URL.revokeObjectURL(imageUrl);
-        if (worker) await worker.terminate();
+        await worker.terminate();
         throw new Error('Image recognition failed. Please try a different image.');
       }
       
     } catch (err) {
       console.error('OCR processing error:', err);
       setError(err instanceof Error ? err.message : 'Failed to process the image. Please try again.');
-      if (worker) await worker.terminate();
       setIsProcessing(false);
       return '';
     }

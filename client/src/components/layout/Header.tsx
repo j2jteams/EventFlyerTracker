@@ -39,26 +39,18 @@ export function Header() {
                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
               />
             </svg>
-            <Link href="/">
-              <a className="text-xl font-bold text-gray-900">EventExtract</a>
-            </Link>
+            <Link className="text-xl font-bold text-gray-900" href="/">EventExtract</Link>
           </div>
           <nav className="flex space-x-4">
-            <Link href="/">
-              <a className={`px-3 py-2 rounded-md text-sm font-medium ${isActive("/")}`}>
-                Home
-              </a>
+            <Link className={`px-3 py-2 rounded-md text-sm font-medium ${isActive("/")}`} href="/">
+              Home
             </Link>
-            <Link href="/events">
-              <a className={`px-3 py-2 rounded-md text-sm font-medium ${isActive("/events")}`}>
-                Events
-              </a>
+            <Link className={`px-3 py-2 rounded-md text-sm font-medium ${isActive("/events")}`} href="/events">
+              Events
             </Link>
             {isAdmin && (
-              <Link href="/upload">
-                <a className={`px-3 py-2 rounded-md text-sm font-medium ${isActive("/upload")}`}>
-                  Upload
-                </a>
+              <Link className={`px-3 py-2 rounded-md text-sm font-medium ${isActive("/upload")}`} href="/upload">
+                Upload
               </Link>
             )}
           </nav>

@@ -32,13 +32,8 @@ export default function HomePage() {
           Upload your event flyers and our system will automatically extract all the important details. No more manual data entry!
         </p>
         <div className="flex justify-center space-x-4">
-          <Link href="/upload">
-            <Button size="lg" className="font-medium">
-              Upload a Flyer
-            </Button>
-          </Link>
           <Link href="/events">
-            <Button size="lg" variant="outline" className="font-medium">
+            <Button size="lg" className="font-medium">
               Browse Events
             </Button>
           </Link>
