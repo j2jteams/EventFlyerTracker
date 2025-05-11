@@ -63,7 +63,57 @@ export function EventForm({ initialData, extractedText, imageData }: EventFormPr
     setIsSubmitting(true);
     
     try {
-      const response = await apiRequest('POST', '/api/events', data);
+      console.log('Submitting event data:', JSON.stringify(data).substring(0, 200) + '...');
+      
+      // Clean large data if needed
+      let submissionData = {...data};
+      
+      // If imageData is too large, compress it further for submission
+      if (submissionData.imageData && submissionData.imageData.length > 1000000) {
+        console.log('Image data is large, compressing further...');
+        const img = new Image();
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        await new Promise<void>((resolve, reject) => {
+          img.onload = () => {
+            // Calculate new dimensions 
+            let width = img.width;
+            let height = img.height;
+            const maxDimension = 800; // Reduced further
+            
+            if (width > height && width > maxDimension) {
+              height = Math.round(height * (maxDimension / width));
+              width = maxDimension;
+            } else if (height > maxDimension) {
+              width = Math.round(width * (maxDimension / height));
+              height = maxDimension;
+            }
+            
+            canvas.width = width;
+            canvas.height = height;
+            
+            if (ctx) {
+              ctx.drawImage(img, 0, 0, width, height);
+              submissionData.imageData = canvas.toDataURL('image/jpeg', 0.6); // Lower quality
+              console.log('Image compressed to size:', submissionData.imageData.length);
+              resolve();
+            } else {
+              reject(new Error('Could not get canvas context'));
+            }
+          };
+          
+          img.onerror = () => reject(new Error('Error loading image for resizing'));
+          // Make sure we have a string, not null/undefined
+          if (typeof submissionData.imageData === 'string') {
+            img.src = submissionData.imageData;
+          } else {
+            resolve(); // Nothing to compress
+          }
+        });
+      }
+      
+      const response = await apiRequest('POST', '/api/events', submissionData);
       const result = await response.json();
       
       toast({

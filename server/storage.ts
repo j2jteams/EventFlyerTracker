@@ -35,18 +35,25 @@ export class MemStorage implements IStorage {
     // Creating a timestamp for createdAt
     const createdAt = new Date();
     
-    // Handle undefined optional fields
-    const sanitizedData: InsertEvent = {
-      ...eventData,
+    // Handle undefined optional fields with explicit typing for each field
+    const sanitizedData = {
+      title: eventData.title,
+      date: eventData.date,
+      startTime: eventData.startTime,
+      endTime: eventData.endTime,
+      venue: eventData.venue,
+      address: eventData.address,
       fee: eventData.fee || null,
       registrationDeadline: eventData.registrationDeadline || null,
       registrationLink: eventData.registrationLink || null,
+      categories: Array.isArray(eventData.categories) ? eventData.categories : [], 
       contactName1: eventData.contactName1 || null,
       contactPhone1: eventData.contactPhone1 || null,
       contactName2: eventData.contactName2 || null,
       contactTitle2: eventData.contactTitle2 || null,
       organization: eventData.organization || null,
       notes: eventData.notes || null,
+      category: eventData.category,
       imageData: eventData.imageData || null,
       extractedText: eventData.extractedText || null,
     };
@@ -56,6 +63,8 @@ export class MemStorage implements IStorage {
       id,
       createdAt
     };
+    
+    console.log('Creating event with ID:', id);
     
     this.events.set(id, event);
     return event;
