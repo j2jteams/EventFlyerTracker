@@ -41,6 +41,8 @@ export function FileDropzone({ onFileDrop, isProcessing = false, progress = 0 }:
   const validateAndProcessFile = (file: File) => {
     // Check if the file is an image
     if (!file.type.startsWith('image/')) {
+      // Using modern toast notifications would be better than alert
+      // but for now, we're keeping the alert for simplicity
       alert('Please upload an image file. Currently only image formats are supported.');
       return;
     }
@@ -51,6 +53,7 @@ export function FileDropzone({ onFileDrop, isProcessing = false, progress = 0 }:
       return;
     }
 
+    // Pass the validated file to the parent component
     onFileDrop(file);
   };
 

@@ -3,6 +3,14 @@ import { InsertEvent } from '@shared/schema';
 interface ExtractedData extends Partial<InsertEvent> {}
 
 export function parseEventText(text: string): ExtractedData {
+  // Return empty data if text is empty
+  if (!text || text.trim() === '') {
+    return {
+      categories: [],
+      category: 'Sports', // Default category
+    };
+  }
+  
   const extractedData: ExtractedData = {
     categories: [],
     category: 'Sports', // Default category

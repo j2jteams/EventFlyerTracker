@@ -27,16 +27,24 @@ export default function UploadPage() {
       
       // Process the image with OCR
       const text = await processImage(uploadedFile);
-      setExtractedText(text);
       
-      // Parse the extracted text
-      const parsedData = parseEventText(text);
-      setExtractedData(parsedData);
-      
-      // Show the extracted details section
-      setShowExtractedDetails(true);
+      if (text && text.trim()) {
+        setExtractedText(text);
+        
+        // Parse the extracted text
+        const parsedData = parseEventText(text);
+        setExtractedData(parsedData);
+        
+        // Show the extracted details section
+        setShowExtractedDetails(true);
+      } else {
+        // Handle case where no text was extracted
+        console.warn("No text could be extracted from the image");
+      }
     } catch (err) {
       console.error("Error processing file:", err);
+      // Keep the extracted details section hidden if there was an error
+      setShowExtractedDetails(false);
     }
   };
 
