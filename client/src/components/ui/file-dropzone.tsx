@@ -40,8 +40,8 @@ export function FileDropzone({ onFileDrop, isProcessing = false, progress = 0 }:
 
   const validateAndProcessFile = (file: File) => {
     // Check if the file is an image
-    if (!file.type.startsWith('image/') && file.type !== 'application/pdf') {
-      alert('Please upload an image or PDF file.');
+    if (!file.type.startsWith('image/')) {
+      alert('Please upload an image file. Currently only image formats are supported.');
       return;
     }
 
@@ -87,9 +87,9 @@ export function FileDropzone({ onFileDrop, isProcessing = false, progress = 0 }:
             className="hidden"
             ref={fileInputRef}
             onChange={handleFileInputChange}
-            accept="image/*,application/pdf"
+            accept="image/*"
           />
-          <p className="text-xs text-gray-500">Supported formats: JPG, PNG, PDF (max 10MB)</p>
+          <p className="text-xs text-gray-500">Supported formats: JPG, PNG, GIF (max 10MB)</p>
         </div>
       </div>
 

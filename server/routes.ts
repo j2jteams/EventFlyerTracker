@@ -7,13 +7,20 @@ import { insertEventSchema } from "@shared/schema";
 import { createInsertSchema } from "drizzle-zod";
 import path from "path";
 
+// Define multer file interface for request
+declare module 'express-serve-static-core' {
+  interface Request {
+    file?: Express.Multer.File;
+  }
+}
+
 // Configure multer for file uploads
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
     fileSize: 10 * 1024 * 1024, // 10MB max file size
   },
-  fileFilter: (_req, file, cb) => {
+  fileFilter: (_req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
     // Accept only images
     if (file.mimetype.startsWith('image/') || file.mimetype === 'application/pdf') {
       cb(null, true);

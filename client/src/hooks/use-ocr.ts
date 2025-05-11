@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { createWorker } from 'tesseract.js';
+import { createWorker, type Worker, type LoggerMessage } from 'tesseract.js';
 
 interface OcrResult {
   text: string;
@@ -23,9 +23,16 @@ export function useOcr(): UseOcrReturn {
     setProgress(0);
     setError(null);
 
+    let worker: Worker | null = null;
+
     try {
-      const worker = await createWorker({
-        logger: m => {
+      // Support for different image formats
+      if (!imageFile.type.startsWith('image/')) {
+        throw new Error('File format not supported. Please upload an image file.');
+      }
+
+      worker = await createWorker({
+        logger: (m: LoggerMessage) => {
           if (m.status === 'recognizing text') {
             setProgress(m.progress * 100);
           }
@@ -36,17 +43,26 @@ export function useOcr(): UseOcrReturn {
       await worker.initialize('eng');
       
       const imageUrl = URL.createObjectURL(imageFile);
-      const { data } = await worker.recognize(imageUrl);
       
-      URL.revokeObjectURL(imageUrl);
-      await worker.terminate();
+      try {
+        const { data } = await worker.recognize(imageUrl);
+        
+        URL.revokeObjectURL(imageUrl);
+        if (worker) await worker.terminate();
+        
+        setProgress(100);
+        setIsProcessing(false);
+        return data.text;
+      } catch (recognizeError) {
+        URL.revokeObjectURL(imageUrl);
+        if (worker) await worker.terminate();
+        throw new Error('Image recognition failed. Please try a different image.');
+      }
       
-      setProgress(100);
-      setIsProcessing(false);
-      return data.text;
     } catch (err) {
       console.error('OCR processing error:', err);
-      setError('Failed to process the image. Please try again.');
+      setError(err instanceof Error ? err.message : 'Failed to process the image. Please try again.');
+      if (worker) await worker.terminate();
       setIsProcessing(false);
       return '';
     }

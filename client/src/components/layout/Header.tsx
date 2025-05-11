@@ -1,7 +1,18 @@
 import { Link, useLocation } from "wouter";
+import { useState, useEffect } from "react";
+
+// Mock authentication state - in a real app, this would come from a proper auth system
+const ADMIN_MODE = true; // Toggle this for testing
 
 export function Header() {
   const [location] = useLocation();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Simulate checking if the user is an admin
+  useEffect(() => {
+    // In a real application, this would be a call to check the user's role
+    setIsAdmin(ADMIN_MODE);
+  }, []);
 
   const isActive = (path: string) => {
     return location === path
@@ -43,11 +54,13 @@ export function Header() {
                 Events
               </a>
             </Link>
-            <Link href="/upload">
-              <a className={`px-3 py-2 rounded-md text-sm font-medium ${isActive("/upload")}`}>
-                Upload
-              </a>
-            </Link>
+            {isAdmin && (
+              <Link href="/upload">
+                <a className={`px-3 py-2 rounded-md text-sm font-medium ${isActive("/upload")}`}>
+                  Upload
+                </a>
+              </Link>
+            )}
           </nav>
         </div>
       </div>

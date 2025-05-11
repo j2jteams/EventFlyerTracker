@@ -1,4 +1,6 @@
 import { events, type Event, type InsertEvent } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 // Interface for storage operations
 export interface IStorage {
@@ -31,10 +33,26 @@ export class MemStorage implements IStorage {
     const id = this.currentEventId++;
     
     // Creating a timestamp for createdAt
-    const createdAt = new Date().toISOString();
+    const createdAt = new Date();
+    
+    // Handle undefined optional fields
+    const sanitizedData: InsertEvent = {
+      ...eventData,
+      fee: eventData.fee || null,
+      registrationDeadline: eventData.registrationDeadline || null,
+      registrationLink: eventData.registrationLink || null,
+      contactName1: eventData.contactName1 || null,
+      contactPhone1: eventData.contactPhone1 || null,
+      contactName2: eventData.contactName2 || null,
+      contactTitle2: eventData.contactTitle2 || null,
+      organization: eventData.organization || null,
+      notes: eventData.notes || null,
+      imageData: eventData.imageData || null,
+      extractedText: eventData.extractedText || null,
+    };
     
     const event: Event = { 
-      ...eventData, 
+      ...sanitizedData, 
       id,
       createdAt
     };
@@ -52,8 +70,7 @@ export class MemStorage implements IStorage {
     
     const updatedEvent: Event = {
       ...existingEvent,
-      ...eventData,
-      id // Ensure ID doesn't change
+      ...eventData
     };
     
     this.events.set(id, updatedEvent);
