@@ -402,6 +402,7 @@ export function EventForm({ initialData, extractedText, imageData }: EventFormPr
                   {...field} 
                   placeholder="Any additional information about the event"
                   rows={3}
+                  value={field.value || ''}
                 />
               </FormControl>
               <FormMessage />

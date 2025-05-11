@@ -33,8 +33,18 @@ const upload = multer({
 // Helper function to validate request body against schema
 function validateRequestBody<T>(schema: z.ZodType<T>, data: unknown): T {
   try {
-    return schema.parse(data);
+    // Log validation issues for debugging
+    console.log('Validating data against schema');
+    const result = schema.safeParse(data);
+    
+    if (!result.success) {
+      console.error('Validation errors:', result.error.format());
+      throw new Error(`Validation error: ${result.error.message}`);
+    }
+    
+    return result.data;
   } catch (error) {
+    console.error('Validation error:', error);
     throw new Error(`Validation error: ${error instanceof Error ? error.message : 'Unknown validation error'}`);
   }
 }
@@ -86,10 +96,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // POST new event
   app.post('/api/events', async (req: Request, res: Response) => {
     try {
+      console.log('Received event data:', JSON.stringify(req.body).substring(0, 200) + '...');
       const eventData = validateRequestBody(insertEventSchema, req.body);
       const event = await storage.createEvent(eventData);
       res.status(201).json(event);
     } catch (error) {
+      console.error('Error creating event:', error);
       res.status(400).json({ message: error instanceof Error ? error.message : 'Failed to create event' });
     }
   });
