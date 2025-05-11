@@ -10,7 +10,7 @@ import { insertEventSchema, InsertEvent } from '@shared/schema';
 import { z } from 'zod';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'wouter';
+import { useLocation } from 'wouter';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 // Extend the schema to add validation
@@ -31,7 +31,7 @@ interface EventFormProps {
 
 export function EventForm({ initialData, extractedText, imageData }: EventFormProps) {
   const { toast } = useToast();
-  const [, navigate] = useRouter();
+  const [, navigate] = useLocation();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<InsertEvent>({
@@ -43,19 +43,19 @@ export function EventForm({ initialData, extractedText, imageData }: EventFormPr
       endTime: initialData.endTime || '',
       venue: initialData.venue || '',
       address: initialData.address || '',
-      fee: initialData.fee || '',
-      registrationDeadline: initialData.registrationDeadline || '',
-      registrationLink: initialData.registrationLink || '',
+      fee: initialData.fee || null,
+      registrationDeadline: initialData.registrationDeadline || null,
+      registrationLink: initialData.registrationLink || null,
       categories: initialData.categories || [],
-      contactName1: initialData.contactName1 || '',
-      contactPhone1: initialData.contactPhone1 || '',
-      contactName2: initialData.contactName2 || '',
-      contactTitle2: initialData.contactTitle2 || '',
-      organization: initialData.organization || '',
-      notes: initialData.notes || '',
+      contactName1: initialData.contactName1 || null,
+      contactPhone1: initialData.contactPhone1 || null,
+      contactName2: initialData.contactName2 || null,
+      contactTitle2: initialData.contactTitle2 || null,
+      organization: initialData.organization || null,
+      notes: initialData.notes || null,
       category: initialData.category || 'Sports',
-      imageData: imageData || '',
-      extractedText: extractedText || '',
+      imageData: imageData || null,
+      extractedText: extractedText || null,
     },
   });
 
